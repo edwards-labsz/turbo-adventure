@@ -29,7 +29,7 @@ SONG_ID      = 599842     # primary custom song ID
 SONG_ID_2    = 1          # secondary custom song ID (0 = none)
 # ─────────────────────────────────────────────────────────────
 
-GD_URL = "https://www.boomlings.com/database/uploadGJLevel21.php"
+GD_URL = "http://www.boomlings.com/database/uploadGJLevel21.php"
 
 # A minimal valid GD 2.2 platformer level
 LEVEL_STRING = (
