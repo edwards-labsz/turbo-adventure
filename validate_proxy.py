@@ -8,7 +8,7 @@ PROXY_LIST_URL = "https://api.proxyscrape.com/v4/free-proxy-list/get?request=dis
 
 def fetch_proxies():
     try:
-        response = requests.get(PROXY_LIST_URL, timeout=10)
+        response = requests.get(PROXY_LIST_URL, timeout=30)
         return [p.strip() for p in response.text.split('\n') if p.strip()]
     except Exception as e:
         print(f"Failed to fetch ProxyScrape list: {e}")
@@ -49,7 +49,7 @@ def main():
     proxy_candidates = fetch_proxies()
     
     # Evaluate up to the top 25 proxies to find a functional choice
-    for proxy in proxy_candidates[:25]:
+    for proxy in proxy_candidates[:9999]:
         if check_proxy(proxy):
             # Parse components cleanly out of the string structure
             clean_proxy = proxy.replace("http://", "")
