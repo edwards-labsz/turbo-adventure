@@ -1,42 +1,47 @@
-name: Enforced Cloudflare Proxy Check
+name: Execute Python Script via SOCKS5 Proxy
+
 on:
-  push:
-  workflow_dispatch: # Allows manual trigger
+  workflow_dispatch: # Allows manual execution from the GitHub Actions UI
   schedule:
-    - cron: '25 * * * *' # Auto-runs every hour at :25
+    - cron: '25 * * * *' # Runs every hour at exactly minute 25 (UTC)
 
 jobs:
-  run-safely:
+  execute-script:
     runs-on: ubuntu-latest
+
     steps:
+      # Step 1: Check out your repository code
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Python environment
+      # Step 2: Set up Python environment
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
-      - name: Install dependencies
-        run: pip install requests
-
-      - name: Install Network Interceptor Wrapper
+      # Step 3: Install normal requests and proxy dependencies
+      # PySocks/socks packages are required by requests to process socks5h:// URLs
+      - name: Install Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y proxychains4
+          python -m pip install --upgrade pip
+          pip install requests
+          pip install requests[socks] httpx[socks]
+          # Uncomment the line below if you have a requirements.txt file
+          # pip install -r requirements.txt
 
-      - name: Filter Out Dead IPs Against Custom Cloudflare Page
-        run: python validate_proxy.py
-
-      - name: Write System-Wide Connection Rule
+      # Step 4: Run your script with the unauthenticated proxy injected globally
+      - name: Run Python Script Through Proxy
+        env:
+          # Use GitHub Secrets to avoid exposing your proxy server's IP address
+          PROXY_HOST: ${{ secrets.SOCKS5_HOST }}
+          PROXY_PORT: ${{ secrets.SOCKS5_PORT }}
         run: |
-          # Read environmental targets saved by the Python validator script
-          source working_proxy.env
+          # Inject proxy settings dynamically without credentials.
+          # 'socks5h://' forces DNS resolution to happen on the proxy server side.
+          export ALL_PROXY="socks5h://$PROXY_HOST:$PROXY_PORT"
+          export HTTP_PROXY="socks5h://$PROXY_HOST:$PROXY_PORT"
+          export HTTPS_PROXY="socks5h://$PROXY_HOST:$PROXY_PORT"
           
-          echo "Writing dynamic mapping to proxychains list..."
-          echo -e "[proxy_list]\nhttp $PROXY_IP $PROXY_PORT" > ${{ github.workspace }}/dynamic_proxychains.conf
-
-      - name: Execute Main Script
-        run: |
-          # Prepend wrapper to make ANY code route through the working IP
-          proxychains4 -f ${{ github.workspace }}/dynamic_proxychains.conf python find_temp_mail.py
+          # Execute your Python code
+          python find_temp_mail.py
