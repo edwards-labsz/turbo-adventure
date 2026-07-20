@@ -170,7 +170,7 @@ def upload_level():
         "audioTrack":     0,        # 0 = custom song
         "auto":           0,
         "password":       1,
-        "original":       0,
+        "original":       145282824,
         "twoPlayer":      0,
         "songID":         SONG_ID,
         "objects":        555,
