@@ -4,7 +4,7 @@ import requests
 
 # REPLACE THIS WITH YOUR ACTUAL CLOUDFLARE TEST PAGE URL
 TEST_URL = "https://www.boomlings.com/database/accounts/accountManagement.php"
-PROXY_LIST_URL = "https://proxyscrape.com"
+PROXY_LIST_URL = "https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&proxy_format=protocolipport&format=text"
 
 def fetch_proxies():
     try:
