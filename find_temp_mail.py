@@ -16,10 +16,17 @@ import requests
 ACCOUNT_ID   = 43358858          # your GD account ID (not userID)
 USERNAME     = "colors3451"         # your in-game username
 PASSWORD     = "Coolguy1"         # your plain-text GD password
-CUSTOM_TITLE = ""         # set to override the random name (e.g. "My Level")
+CUSTOM_TITLE = "GIFT"         # base title (used in all modes below)
+# TITLE_MODE options:
+#   "random"       → ignore CUSTOM_TITLE, use random word + roman numeral  (e.g. "Phantom CCXLII")
+#   "custom"       → use CUSTOM_TITLE exactly                              (e.g. "My Level")
+#   "prefix"       → CUSTOM_TITLE + random roman numeral                   (e.g. "My Level VIII")
+#   "suffix"       → random word + CUSTOM_TITLE                            (e.g. "Phantom My Level")
+#   "full"         → CUSTOM_TITLE + random word + roman numeral            (e.g. "My Level Phantom CCXLII")
+TITLE_MODE   = "full"
 # ─────────────────────────────────────────────────────────────
 
-GD_URL = "http://www.boomlings.com/database/uploadGJLevel21.php"
+GD_URL = "https://www.boomlings.com/database/uploadGJLevel21.php"
 
 # A minimal valid GD 2.2 level — one spike at the start
 LEVEL_STRING = (
@@ -129,7 +136,16 @@ def upload_level():
         print("⚠  Fill in ACCOUNT_ID, USERNAME, and PASSWORD at the top of the script first.")
         return
 
-    level_name = CUSTOM_TITLE if CUSTOM_TITLE.strip() else random_level_name()
+    if TITLE_MODE == "custom":
+        level_name = CUSTOM_TITLE or random_level_name()
+    elif TITLE_MODE == "prefix":
+        level_name = f"{CUSTOM_TITLE} {to_roman(random.randint(0, 1000))}"
+    elif TITLE_MODE == "suffix":
+        level_name = f"{random.choice(WORDS).capitalize()} {CUSTOM_TITLE}"
+    elif TITLE_MODE == "full":
+        level_name = f"{CUSTOM_TITLE} {random_level_name()}"
+    else:  # "random"
+        level_name = random_level_name()
     print(f"📛  Level name: {level_name}")
 
     gjp2  = generate_gjp2(PASSWORD)
@@ -148,10 +164,10 @@ def upload_level():
         "audioTrack":     0,       # 0 when using a custom song
         "auto":           0,
         "password":       1,       # no copy
-        "original":       145280739,
+        "original":       0,
         "twoPlayer":      0,
         "songID":         599842,
-        "objects":        1,
+        "objects":        554,
         "coins":          0,
         "requestedStars": 1,
         "unlisted":       0,       
