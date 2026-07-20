@@ -19,7 +19,7 @@ PASSWORD     = "Coolguy1"         # your plain-text GD password
 CUSTOM_TITLE = ""         # set to override the random name (e.g. "My Level")
 # ─────────────────────────────────────────────────────────────
 
-GD_URL = "https://www.boomlings.com/database/uploadGJLevel21.php"
+GD_URL = "http://www.boomlings.com/database/uploadGJLevel21.php"
 
 # A minimal valid GD 2.2 level — one spike at the start
 LEVEL_STRING = (
