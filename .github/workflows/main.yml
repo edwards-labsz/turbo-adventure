@@ -3,7 +3,7 @@ name: Execute Python Script via SOCKS5 Proxy
 on:
   workflow_dispatch: # Allows manual execution from the GitHub Actions UI
   schedule:
-    - cron: '25 * * * *' # Runs every hour at exactly minute 25 (UTC)
+    - cron: '20 * * * *' # Runs every hour at exactly minute 25 (UTC)
 
 jobs:
   execute-script:
