@@ -148,7 +148,7 @@ def upload_level():
         "audioTrack":     0,       # 0 when using a custom song
         "auto":           0,
         "password":       1,       # no copy
-        "original":       0,
+        "original":       145280739,
         "twoPlayer":      0,
         "songID":         599842,
         "objects":        1,
