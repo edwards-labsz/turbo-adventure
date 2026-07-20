@@ -1,1 +1,42 @@
+name: Enforced Cloudflare Proxy Check
+on:
+  push:
+  workflow_dispatch: # Allows manual trigger
+  schedule:
+    - cron: '25 * * * *' # Auto-runs every hour at :25
 
+jobs:
+  run-safely:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Install Network Interceptor Wrapper
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y proxychains4
+
+      - name: Filter Out Dead IPs Against Custom Cloudflare Page
+        run: python validate_proxy.py
+
+      - name: Write System-Wide Connection Rule
+        run: |
+          # Read environmental targets saved by the Python validator script
+          source working_proxy.env
+          
+          echo "Writing dynamic mapping to proxychains list..."
+          echo -e "[proxy_list]\nhttp $PROXY_IP $PROXY_PORT" > ${{ github.workspace }}/dynamic_proxychains.conf
+
+      - name: Execute Main Script
+        run: |
+          # Prepend wrapper to make ANY code route through the working IP
+          proxychains4 -f ${{ github.workspace }}/dynamic_proxychains.conf python find_temp_mail.py
