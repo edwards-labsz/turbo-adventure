@@ -16,14 +16,14 @@ ACCOUNT_ID   = 43360728          # your GD account ID (not userID)
 USERNAME     = "iQd712r7BL"         # your in-game username
 PASSWORD     = "Coolguy1"         # your plain-text GD password
 
-CUSTOM_TITLE = "GIFT Flow CCCXCVI"         # base title (used in modes below)
+CUSTOM_TITLE = "GIFT"         # base title (used in modes below)
 # TITLE_MODE options:
 #   "random"  → random word + roman numeral          (e.g. "Phantom CCXLII")
 #   "custom"  → CUSTOM_TITLE exactly                 (e.g. "My Level")
 #   "prefix"  → CUSTOM_TITLE + random roman numeral  (e.g. "My Level VIII")
 #   "suffix"  → random word + CUSTOM_TITLE           (e.g. "Phantom My Level")
 #   "full"    → CUSTOM_TITLE + random word + numeral (e.g. "My Level Phantom CCXLII")
-TITLE_MODE   = "custom"
+TITLE_MODE   = "full"
 
 SONG_ID      = 599842     # primary custom song ID
 SONG_ID_2    = 1          # secondary custom song ID (0 = none)
