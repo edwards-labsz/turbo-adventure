@@ -12,21 +12,22 @@ import requests
 # ─────────────────────────────────────────────────────────────
 # CONFIG — fill in your credentials before running
 # ─────────────────────────────────────────────────────────────
-ACCOUNT_ID   = 43360728          # your GD account ID (not userID)
+ACCOUNT_ID   = 0          # your GD account ID (not userID)
 USERNAME     = "iQd712r7BL"         # your in-game username
 PASSWORD     = "Coolguy1"         # your plain-text GD password
 
-CUSTOM_TITLE = "GIFT"         # base title (used in modes below)
+CUSTOM_TITLE = "GIFT Flow CCCXCVI"         # base title (used in modes below)
 # TITLE_MODE options:
 #   "random"  → random word + roman numeral          (e.g. "Phantom CCXLII")
 #   "custom"  → CUSTOM_TITLE exactly                 (e.g. "My Level")
 #   "prefix"  → CUSTOM_TITLE + random roman numeral  (e.g. "My Level VIII")
 #   "suffix"  → random word + CUSTOM_TITLE           (e.g. "Phantom My Level")
 #   "full"    → CUSTOM_TITLE + random word + numeral (e.g. "My Level Phantom CCXLII")
-TITLE_MODE   = "full"
+TITLE_MODE   = "custom"
 
 SONG_ID      = 599842     # primary custom song ID
 SONG_ID_2    = 1          # secondary custom song ID (0 = none)
+SFX_IDS      = "5853,14061"  # comma-separated SFX IDs
 # ─────────────────────────────────────────────────────────────
 
 GD_URL = "http://www.boomlings.com/database/uploadGJLevel21.php"
@@ -185,10 +186,10 @@ def upload_level():
         "wt2":            0,
     }
 
-    # Add second song only if set
+    # Always send SFX; add second song only if set
+    data["sfxIDs"] = SFX_IDS
     if SONG_ID_2:
         data["songIDs"] = f"{SONG_ID},{SONG_ID_2}"
-        data["sfxIDs"]  = ""
 
     headers = {"User-Agent": ""}
 
